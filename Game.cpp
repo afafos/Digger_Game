@@ -2,12 +2,12 @@
 #include "GameObject.h"
 #include "Enemy.h"
 
-// Сдвиг координат для вывода карты
+// Shift coordinates for map display
 const int LEFT = 0;
 const int TOP = 100;
-// Интервал генерации врагов
+// Enemy generation interval
 const int ENEMY_INTERVAL = 10.0f;
-// Максимальное число врагов
+// Maximum number of enemies
 const int MAX_ENEMY_COUNT = 7;
 
 int Game::getCountTreasures() const
@@ -29,14 +29,14 @@ int Game::getCountEnemys() const
 Game::Game() {
 	font.loadFromFile("data\\Arial.ttf");
 
-	// Рамка создание
+	// Frame creation
 	border.setSize(sf::Vector2f(800-10, 100-10));
 	border.setPosition(5, 5);
 	border.setFillColor(sf::Color::Black);
 	border.setOutlineThickness(5);
 	border.setOutlineColor(sf::Color(128,128,128));
 
-	// Загрузка ресурсов
+	// Loading resources
 	loadFileTo(digger, "data\\digger.png");
 	loadFileTo(ground, "data\\ground.png");
 	loadFileTo(emerald, "data\\emerald.png");
@@ -47,7 +47,7 @@ Game::Game() {
 	sf::Sprite enemy;
 	loadFileTo(enemy, "data\\enemy.png");
 
-	// Составляем карту спрайтов по кодам, для использования в рендере
+	// Making a sprite map using codes for use in rendering
 	sprites.insert_or_assign(std::string("digger"), digger);
 	sprites.insert_or_assign(std::string("enemy"), enemy);
 	sprites.insert_or_assign(std::string("emerald"), emerald);
@@ -55,23 +55,23 @@ Game::Game() {
 	sprites.insert_or_assign(std::string("gold"), gold);
 	sprites.insert_or_assign(std::string("fireball"), fireball);
 
-	// Грузим карту
+	// Loading the map
 	map.loadFromFile("data\\map1.dat",objects);
 	
-	// Создаём игрока
+	// Creating a player
 	player = Player(&map, &objects, GameObject::SIZE*map.getWidth() / 2, GameObject::SIZE * (map.getHeight() - 1));
 	objects.push_back(&player);
 
-	// Инициализация состояния игры и жизней
+	// Initializing game state and lives
 	gamestate = Play;
 	lifecount = 2;
-	// Выпустить нового врага через 1 секунду
+	// Release a new enemy after 1 second
 	counter_enemy.upset(1.0);
 }
 
 void Game::Update(sf::RenderWindow& window, float dt)
 {
-	// В цикле опрос событий
+	// Event polling in the loop
 	sf::Event event;
 	while (window.pollEvent(event))
 	{
@@ -80,28 +80,28 @@ void Game::Update(sf::RenderWindow& window, float dt)
 
 		if (event.type == sf::Event::KeyPressed) {
 			if (event.key.code == sf::Keyboard::Escape) window.close();
-			// Выстрел 
+			// Shot
 			if (event.key.code == sf::Keyboard::Space)
 				if (gamestate == Play) player.tryFire();
 		}
 	}
 
-	// Пока игра активна, управляем 
+	// While the game is active, we control 
 	if (gamestate == Play) {
-		// Если клавиши удержаны, то двигаем игрока
+		// If the keys are held, then we move the player
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) player.sendLeft(); else
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) player.sendRight(); else
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) player.sendUp(); else
 					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) player.sendDown(); else
-						// Иначе отправляем запрос на остановку
+						// Otherwise we send a request to stop
 						player.sendStop();
 
 		
-		// Обновить все объекты
+		// Update all objects
 		for (int i = 0; i < objects.size(); i++)
 			objects[i]->Update(dt);
 
-		// Удалить объекты с меткой удаления
+		// Delete objects with a deletion flag
 		int p = 0;
 		while (p < objects.size())
 			if (objects[p]->isRemoved())
@@ -109,7 +109,7 @@ void Game::Update(sf::RenderWindow& window, float dt)
 			else
 				p++;
 
-		// Обработка счетчика врагов, генерация новых, если нужно и не превысили число
+		// Processing the enemy counter, generating new ones if necessary and not exceeding the number
 		counter_enemy.update(dt);
 		if (counter_enemy.onceReachNol()) {
 			if (getCountEnemys() < MAX_ENEMY_COUNT) {
@@ -119,13 +119,13 @@ void Game::Update(sf::RenderWindow& window, float dt)
 			counter_enemy.upset(ENEMY_INTERVAL);
 		}
 
-		// Победа по нулю изумрудов на карте
+		// Victory by zero emeralds on the map
 		if (getCountTreasures() == 0) gamestate = Win;
-		// Если игрока съели или раздавили, то минус жизнь и если жизни закончились, то конец игре
+		// If the player is eaten or crushed, then minus life and if the lives are over, then the game is over
 		if (player.isRemoved()) {
 			if (lifecount > 0) {
 				lifecount--;
-				// Но если можно, то запустить игрока заново
+				// But if possible, then start the player again
 				player = Player(&map, &objects, GameObject::SIZE * map.getWidth() / 2, GameObject::SIZE * (map.getHeight() - 1));
 				objects.push_back(&player);
 			}
@@ -137,28 +137,28 @@ void Game::Update(sf::RenderWindow& window, float dt)
 
 void Game::Render(sf::RenderWindow& window)
 {
-	// Вывод карты
+	// Map output
 	for (int i = 0; i < map.getWidth(); i++)
 		for (int j = 0; j < map.getHeight(); j++)
 			if (!map.isFree(i, j))
 				drawSprite(window,ground,LEFT + GameObject::SIZE * i, TOP + GameObject::SIZE * j);
 
-	// Вывод рамки
+	// Frame output
 	window.draw(border);
 
-	// Вывод жизней
+	// Output of lives
 	digger.setRotation(0);
 	digger.setScale(1, 1);
 	digger.setOrigin(0, 0);
 	for (int i=0; i<lifecount; i++)
 		drawSprite(window, digger, 5 + (GameObject::SIZE + 10) * i, 5);
 
-	// ВЫвод всех объектов, кроме игрока
+	// Output of all objects except the player
 	for (int i = 0; i < objects.size(); i++)
 		if (objects[i]!=&player)
 			drawSprite(window, sprites[objects[i]->getSprite()], objects[i]->getX() + LEFT, objects[i]->getY() + TOP);
 
-	// Игрока выводим отдельно с учетом его направления
+	// We display the player separately, taking into account his direction
 	if (player.getDirection() == dirLeft) {
 		digger.setRotation(0);
 		digger.setScale(-1, 1);
@@ -182,11 +182,11 @@ void Game::Render(sf::RenderWindow& window)
 	if (!player.isRemoved())
 		drawSprite(window, digger, player.getX() + LEFT, player.getY() + TOP);
 
-	// Вывод меток игры
+	// Displaying game tags
 	if (gamestate == Win)
-		drawLabelW(window, L"Победа!", 400, 10, font, 28, sf::Color::Green);
+		drawLabelW(window, L"Victory!", 400, 10, font, 28, sf::Color::Green);
 	if (gamestate == Fail)
-		drawLabelW(window, L"Поражение!", 400, 50, font, 28, sf::Color::Red);
+		drawLabelW(window, L"Defeat!", 400, 50, font, 28, sf::Color::Red);
 }
 
 void Game::loadFileTo(sf::Sprite& sprite, const std::string& filename)

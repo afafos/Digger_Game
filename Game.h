@@ -8,14 +8,14 @@
 #include <map>
 #include <vector>
 
-// Состояние игры
+// Game state
 enum GameState { Play, Win, Fail };
 
-// Основной класс игры
+// Main class of the game
 class Game
 {
 private:
-	// Ресурсы игры
+	// Game resources
 	sf::Font font;
 	sf::Sprite digger;
 	sf::Sprite ground;
@@ -24,34 +24,34 @@ private:
 	sf::Sprite goldbag;
 	sf::Sprite fireball;
 	sf::RectangleShape border;
-	// Карта спрайтов для получения их по кодам
+	// Sprite map for getting them by codes
 	std::map<std::string, sf::Sprite> sprites;
-	// Объект игрока
+	// Player object
 	Player player;
-	// Все игровые объекты
+	// All game objects
 	std::vector<GameObject*> objects;
-	// Состояние игры
+	// Game state
 	GameState gamestate;
-	// Загрузчик и рисователь спрайтов
+	// Sprite loader and painter
 	void loadFileTo(sf::Sprite& sprite, const std::string& filename);
 	void drawSprite(sf::RenderTarget& target, sf::Sprite& sprite, int x, int y);
-	// Карта игры
+	// Game map
 	Map map;
-	// Счетчик для генерации новых врагов
+	// Counter for generating new enemies
 	Counter counter_enemy;
-	// Остаток жизней
+	// Rest of lives
 	int lifecount;
-	// Получение объекта по коду
+	// Getting an object by code
 	int getCountTreasures() const;
 	int getCountEnemys() const;
-	// Вывод текста
+	// Text output
 	void drawLabelW(sf::RenderTarget& target, const std::wstring& wstr, int x, int y, const sf::Font& font, int size,
 		sf::Color color = sf::Color::White);
 public:
 	Game();
-	// Процедура обновления игры
+	// Game update procedure
 	void Update(sf::RenderWindow& window, float dt);
-	// Процедура вывода игры на экран
+	// The procedure for displaying the game on the screen
 	void Render(sf::RenderWindow& window);
 };
 

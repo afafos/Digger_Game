@@ -29,29 +29,29 @@ bool GoldBag::isMovable() const
 
 void GoldBag::Update(float dt)
 {	
-	// Проверяем, может ли мешок падать
+	// Checking if the bag can fall
 	bool canfall = true;
-	// Нет, если снизу занято
+	// No, if downstairs is busy
 	if (!map->isFree(getCellI(), getCellJ() + 1)) canfall = false;
 
-	// Нет, если снизу есть объекты
+	// No, if there are objects below
 	for (int i = 0; i < objects->size(); i++)
 		if ((objects->at(i)->getCellI() == getCellI()) && (objects->at(i)->getCellJ() == getCellJ()+1))
 			canfall = false;
 
 	if (canfall) {
-		// Если падаем, то выравниваем по x
+		// If we fall, then we align by x
 		x = getCellI() * GameObject::SIZE;
-		// двигаем по y
+		// Move along y
 		y += SPEED * dt;
-		// Если снизу занято
+		// If the bottom is busy
 		if (!map->isFree(getCellI(), getCellJ() + 1)) {
-			// Удаляем объект и создаем золото
+			// Removing the object and creating gold
 			Remove();
 			Gold* g = new Gold(map, objects, getCellI() * GameObject::SIZE, getCellJ() * GameObject::SIZE);
 			objects->push_back(g);
 		}
-		// Если в процессе падения кого-то придавили, то убираем его с карты
+		// If someone was crushed during the fall, then we remove him from the map
 		for (int i = 0; i < objects->size(); i++)
 			if ((objects->at(i)->getCellI() == getCellI()) && (objects->at(i)->getCellJ() == getCellJ() + 1))
 				objects->at(i)->Remove();

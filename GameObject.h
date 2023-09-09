@@ -2,59 +2,59 @@
 #include <string>
 #include <vector>
 
-// Опережающая декларация для защиты от круговых ссылок
+// A forward declaration to protect against circular references
 class Map;
 
-// Базовый класс для игровых объектов
+// Base class for game objects
 class GameObject
 {
 protected:
-	// Положение
+	// Position
 	float x;
 	float y;
-	// Направление скорости (не скорость! здесь только -1, 0 и 1)
+	// Speed direction (not speed! there are only -1, 0 and 1)
 	int dx;
 	int dy;
-	// Метка удаления объекта
+	// Object deletion mark
 	bool isremoved;
-	// Ссылка на карту - объекту нужно знать окружение
+	// Link to map - object needs to know its surroundings
 	Map * map;
-	// Ссылка на все объекты - с ними надо взаимодейстсвовать
+	// Link to all objects - you need to interact with them
 	std::vector<GameObject*> * objects;
 public:
-	// Конструктор - со ссылкой на карту, объекты и начальную позицию
+	// Constructor - with reference to map, objects and starting position
 	GameObject(Map * map, std::vector<GameObject*> * objects, int x, int y);
-	// Конструктор базовый
+	// Basic constructor
 	GameObject();
-	// Виртуальный метод получения кода спрайта объекта
+	// Virtual method for getting object sprite code
 	virtual std::string getSprite() const = 0;
-	// Далее идут методы, описывающие свойства игровых объектов, на основе которых они взаимодействуют друг с другом
-	// Является целевым сокровищем для сбора
+	// Next come methods that describe the properties of game objects, on the basis of which they interact with each other
+    // is the target treasure to collect
 	virtual bool isTreasure() const;
-	// Является врагом
+	// Is the enemy
 	virtual bool isEnemy() const;
-	// Является непроходимым для игрока и монстров
+	// Is impassable for the player and monsters
 	virtual bool isSolid() const;
-	// Может быть поднят монстрами и игроком
+	// Can be picked up by monsters and the player
 	virtual bool isGrabbable() const;
-	// Может двигаться игроком
+	// Can be moved by the player
 	virtual bool isMovable() const;
-	// Проверка метки удаления объекта
+	// Checking an object's deletion flag
 	bool isRemoved() const;
-	// Вызов установки метки удаления объекта
+	// Calling to set the object deletion mark
 	void Remove();
-	// Получение и установка координат
+	// Getting and setting coordinates
 	int getX() const;
 	int getY() const;
 	void setX(float x);
 	void setY(float y);
-	// Получения индекса ячейки на карте для текущего положения объекта (ближайшая)
+	// Getting the cell index on the map for the current position of the object (closest)
 	int getCellI() const;
 	int getCellJ() const;
-	// Обновление объекта
+	// Updating an object
 	virtual void Update(float dt);
-	// Проверка пересечения с другим объектом
+	// Checking for intersection with another object
 	bool isIntersectWith(const GameObject * obj) const;
-	const static int SIZE = 50; // Фиксированный размер игрового элемента
+	const static int SIZE = 50; // Fixed game element size
 };
 

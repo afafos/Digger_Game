@@ -3,24 +3,24 @@
 #include <vector>
 #include "GameObject.h"
 
-// Класс карты
+// Map class
 class Map
 {
 private:
-	// Размеры
+	// Size
 	int w; 
 	int h;
-	// Массив ячееек
+	// Cell array
 	bool** isfree;
 public:
 	Map();
-	// Загрузка из файла
+	// Loading from file
 	void loadFromFile(std::string mapfile, std::vector<GameObject*> & objects);
-	// Проверка свободной ячейки
+	// Checking a free cell
 	bool isFree(int i, int j) const;
-	// Очистка ячейки
+	// Cell cleaning
 	void clearCell(int i, int j);
-	// Размеры
+	// Size
 	int getWidth() const;
 	int getHeight() const;
 };

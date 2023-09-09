@@ -3,7 +3,7 @@
 #include "GameObject.h"
 #include "Map.h"
 
-// Êכאסס פאוינבמכא
+// Fireball class
 class Fireball :
 	public GameObject
 {

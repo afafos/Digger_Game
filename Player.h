@@ -3,31 +3,31 @@
 #include "Map.h"
 #include "Counter.h"
 
-// Команды для игрока - движение и остановка
+// Player commands - move and stop
 enum Command { cmdNone, cmdLeft, cmdRight, cmdUp, cmdDown, cmdStop };
-// Направление игрока - сохраняется даже при остановке, указывая последнее движение
+// Player direction - saved even when stopped, indicating last movement
 enum Direction { dirLeft, dirRight, dirUp, dirDown };
 
-// Класс игрока
+// Player class
 class Player :
     public GameObject
 {
 private:
-	// Команда
+	// Command
 	Command cmd;
-	// Направление
+	// Direction
 	Direction lastdir;
-	// Счетчик готовности выстрела
+	// Shot readiness counter
 	Counter fireprepare;
 public:
 	Player();
-	// Конструктор с картой и объектами
+	// Constructor with map and objects
 	Player(Map* map, std::vector<GameObject*>* objects, int x, int y);
 	virtual std::string getSprite() const;
 	virtual void Update(float dt);
-	// Получение направления
+	// Getting directions
 	Direction getDirection() const;
-	// Команды от игрока - движение, стоп и выстрел
+	// Player commands - move, stop and shoot
 	void sendLeft();
 	void sendRight();
 	void sendUp();

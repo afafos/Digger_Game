@@ -20,18 +20,18 @@ std::string Fireball::getSprite() const
 
 void Fireball::Update(float dt)
 {	
-	// Обновляем координаты
+	// Update coordinates
 	x += SPEED * dx * dt;
 	y += SPEED * dy * dt;
 
-	// Если уперлись в стену, убираем себя
+	// If we hit a wall, we remove ourselves
 	if (!map->isFree(getCellI(), getCellJ())) Remove();
 		
 	for (int i = 0; i < objects->size(); i++)
 		if (objects->at(i)->isIntersectWith(this)) {
-			// Удаляем себя в любом случае при ударе об объект
+			// We remove ourselves in any case when we hit an object
 			Remove();
-			// Если объект враг, то и его тоже
+			// If the object is an enemy, then so is he
 			if (objects->at(i)->isEnemy()) objects->at(i)->Remove();			
 		}
 }

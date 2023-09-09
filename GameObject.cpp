@@ -75,7 +75,7 @@ void GameObject::setY(float y)
     this->y = y;
 }
 
-// «десь вычисление €чейки объекта на карте, ближайша€ к объекту
+// Here is the calculation of the feature cell on the map that is closest to the feature
 int GameObject::getCellI() const
 {
     return round((float)x / (float)SIZE);

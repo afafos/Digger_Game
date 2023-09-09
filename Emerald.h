@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
-// Класс изумруда
+// Emerald class
 class Emerald :
     public GameObject
 {

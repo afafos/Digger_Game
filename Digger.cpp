@@ -4,7 +4,7 @@
 #include <SFML\Window\Mouse.hpp>
 #include "Game.h"
 
-// Подключаем SFML
+// Connect SFML
 #pragma comment (lib, "lib\\sfml-window.lib")
 #pragma comment (lib, "lib\\sfml-system.lib")
 #pragma comment (lib, "lib\\sfml-graphics.lib")
@@ -12,7 +12,7 @@
 
 int main()
 {
-    // Создаем окно
+    // Creating a window
     sf::RenderWindow window(sf::VideoMode(800, 600), "Digger");
     window.setVerticalSyncEnabled(true);
     window.setFramerateLimit(60);
@@ -21,14 +21,14 @@ int main()
     Game game;
     sf::Clock clock;
     float lasttime = clock.getElapsedTime().asSeconds();
-    // Запуск главного цикла игры
+    // Starting the main game loop
     while (window.isOpen()) {
-        // Обновляем состояние игры
+        // Update the game state
         float newtime = clock.getElapsedTime().asSeconds();
         game.Update(window, newtime - lasttime);
         lasttime = newtime;
                         
-        // Выводим игру на экран
+        // Displaying the game on the screen
         window.clear();
         game.Render(window);
         window.display();

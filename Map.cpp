@@ -5,7 +5,7 @@
 #include "Goldbag.h"
 #include "Gold.h"
 
-// Символы из файла
+// Symbols from file
 const char SYMB_FREE = '-';
 const char SYMB_EMERALD = '*';
 const char SYMB_GOLDBAG = '$';
@@ -19,23 +19,23 @@ Map::Map() {
 
 void Map::loadFromFile(std::string mapfile, std::vector<GameObject*>& objects)
 {
-	// Чтение карты
+	// Reading the map
 	std::ifstream stm;
 	stm.open(mapfile);
 
-	// Сначала её размеры
+	// First its size
 	std::string line;
 	getline(stm, line);	
 	this->w = std::stoi(line);
 	getline(stm, line);
 	this->h = std::stoi(line);
 
-	// Потом создание матрицы
+	// Then creating the matrix
 	isfree = new bool*[w];
 	for (int i = 0; i < w; i++) 
 		isfree[i] = new bool[h];
 
-	// Потом создаём карту, наполняя объекты и устанавливая ячейки
+	// Then we create a map by filling in objects and setting up cells
 	for (int j = 0; j < h; j++) {
 		getline(stm, line);
 		for (int i = 0; i < w; i++) {
@@ -53,7 +53,7 @@ void Map::loadFromFile(std::string mapfile, std::vector<GameObject*>& objects)
 
 bool Map::isFree(int i, int j) const
 {
-	// Проверка выхода за границы
+	// Checking for out of bounds
 	if (i < 0) return false;
 	if (j < 0) return false;
 	if (i >= w) return false;
@@ -63,7 +63,7 @@ bool Map::isFree(int i, int j) const
 
 void Map::clearCell(int i, int j)
 {
-	// Проверка выхода за границы
+	// Checking for out of bounds
 	if (i < 0) return;
 	if (j < 0) return;
 	if (i >= w) return;

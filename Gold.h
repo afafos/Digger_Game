@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
-// Класс кучи золота
+// Gold pile class
 class Gold :
     public GameObject
 {

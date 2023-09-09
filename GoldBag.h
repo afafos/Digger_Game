@@ -2,7 +2,7 @@
 
 #include "GameObject.h"
 
-// Класс мешка золота
+// Gold bag class
 class GoldBag :
     public GameObject
 {

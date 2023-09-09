@@ -2,17 +2,17 @@
 #include "GameObject.h"
 #include "Map.h"
 
-// Класс врага
+// Enemy class
 class Enemy :
     public GameObject
 {
 private:
-	// Координаты ячейки, куда враг движется
+	// Coordinates of the cell where the enemy is moving
 	int nextx;
 	int nexty;
-	// Генерация следующего направления случайного
+	// Generating the next random direction
 	void genNextDirection();
-	// Проверка наличия непроходимых объектов по координатам
+	// Checking the presence of impassable objects by coordinates
 	bool isSolidObjectAt(int i, int j) const;
 public:
 	Enemy();

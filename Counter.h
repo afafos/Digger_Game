@@ -1,6 +1,6 @@
 #pragma once
 
-// Класс счетчика - позволяет отсчитывать заданное время, через вызовы update
+// Counter class - allows you to count a given time through update calls
 class Counter
 {
 private:
@@ -8,13 +8,13 @@ private:
 	bool oncereach ;
 public:
 	Counter();
-	// Установка счетчика
+	// Counter installation
 	void upset(float interval) ;
-	// Обновление счетчика
+	// Counter update
 	void update(float dt) ;
-	// Проверка, идет ли еще заданный отсчет
+	// Checking whether the specified count is still in progress
 	bool isActive() ;
-	// Проверка достижения времени
+	// Checking the achievement of time
 	bool onceReachNol() ;
 	void reset() ;	
 };
